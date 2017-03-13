@@ -1,3 +1,5 @@
+Import-Module .\Scripts.psm1
+
 $port = 11119
 $iisExpressPath = "c:\program files\iis express\iisexpress.exe"
 If ([environment]::Is64BitOperatingSystem) {
@@ -14,7 +16,7 @@ appPath:         $appPath
 testAppPath:     $testAppPath
 "@
 
-Write-Host $iisExpressSettings  -ForegroundColor Magenta
-Write-Host "Starting IIS Express"  -ForegroundColor Magenta
+Write-BuildInfo $iisExpressSettings
+Write-BuildInfo "Starting IIS Express"
 
 Start-Process -FilePath $iisExpressPath -ArgumentList "/port:$port /path:$appPath"  -WindowStyle Hidden

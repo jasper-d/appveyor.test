@@ -1,10 +1,12 @@
+Import-Module ..\Scripts.psm1
+
 $root = (split-path -parent $MyInvocation.MyCommand.Definition) + '\..'
 
-Write-Host "Root path: $root" -ForegroundColor Magenta
-Write-Host "Getting version from assembly..." -ForegroundColor Magenta
+Write-BuildInfo "Root path: $root"
+Write-BuildInfo "Getting version from assembly..."
 
-$version = [System.Reflection.Assembly]::LoadFile("$root\FooLib\bin\Release\FooLib.dll").GetName().Version
+$version = Get-Version
 
-Write-Host "Version:   $version" -ForegroundColor Magenta
-Write-Host "Packing NuGet packages..." -ForegroundColor Magenta
+Write-BuildInfo "Version:   $version"
+Write-BuildInfo "Packing NuGet packages..."
 & nuget pack $root\nuget\FooLib.nuspec -Version $version -Symbols -OutputDirectory "$root\nuget\artifacts" -NonInteractive
