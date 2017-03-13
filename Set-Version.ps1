@@ -21,7 +21,7 @@ function UpdateVersionFile([string] $major, [string] $minor, [string] $patch){
 function SetVersion(){
     $commitHash = HashToInt32($env:APPVEYOR_REPO_COMMIT)
 
-    if ($env:APPVEYOR_REPO_TAG -and $env:APPVEYOR_REPO_TAG_NAME.Trim() -cmatch '(?im)^(?:(?:v\.)|(?:v))?(?<major>\d{1,9})\.(?<minor>\d{1,9})\.(?<patch>\d{1,9})$') {
+    if ($env:APPVEYOR_REPO_TAG -and $env:APPVEYOR_REPO_TAG_NAME -and $env:APPVEYOR_REPO_TAG_NAME -cmatch '^\s*(?:(?:v\.)|(?:v))?\s*(?<major>\d{1,9})\.(?<minor>\d{1,9})\.(?<patch>\d{1,9})\s*$') {
         Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($commitHash)"
         UpdateVersionFile $matches['major'] $matches['minor'] $matches['patch']
 
