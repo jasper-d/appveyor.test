@@ -3,7 +3,7 @@ clone_depth: 5
 platform: Any CPU
 environment:
   github_token:
-    secure: zYCOwcOlgTzvbD0CjJRDNQ==
+    secure: K71ovddtT7BuOR1D1K9uVRdOT2+Apl6GdQjBYjUki/ySUX9EcWb2MNtupx5ymrkt
 
 configuration: Release
 
@@ -16,7 +16,7 @@ assembly_info:
 
 init:
   # Set version number
-  - ps: .\Set-Version.ps1
+  - ps: Set-Version.ps1
 
 before_build:
   - cmd: nuget restore .\FooLib.sln -Verbosity detailed
