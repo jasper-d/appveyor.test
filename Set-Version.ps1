@@ -28,7 +28,7 @@ function SetVersion(){
         Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "true"
     } else {
         $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
-        Update-AppveyorBuild -Version  -Version "$($version.major).$($version.minor).$($version.patch).$($commitHash)"
+        Update-AppveyorBuild -Version "$($version.major).$($version.minor).$($version.patch).$($commitHash)"
     }
 }
 
