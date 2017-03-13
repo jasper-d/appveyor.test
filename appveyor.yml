@@ -18,7 +18,7 @@ assembly_info:
   # Set version number
 
 before_build:
-  - ps: Set-Version.ps1
+  - ps: .\Set-Version.ps1
   - cmd: nuget restore .\FooLib.sln -Verbosity detailed
 
 build:
