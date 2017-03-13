@@ -14,11 +14,11 @@ assembly_info:
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
 
-init:
+#init:
   # Set version number
-  - ps: Set-Version.ps1
 
 before_build:
+  - ps: Set-Version.ps1
   - cmd: nuget restore .\FooLib.sln -Verbosity detailed
 
 build:
