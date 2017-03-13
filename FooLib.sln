@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		Prepare-TestEnvironment.ps1 = Prepare-TestEnvironment.ps1
 		README.md = README.md
+		Scripts.psm1 = Scripts.psm1
 		Set-Version.ps1 = Set-Version.ps1
+		Update-VersionPostDeploy.ps1 = Update-VersionPostDeploy.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{51BBFBA2-02A1-4E2D-85B5-2C19A0FC696A}"

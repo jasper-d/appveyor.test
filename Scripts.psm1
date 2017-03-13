@@ -22,6 +22,11 @@ function UpdateVersionFile([string] $major, [string] $minor, [string] $patch){
     ConvertTo-Json -InputObject $version | Out-File -FilePath ".\version.json" -Encoding utf8 
 }
 
+function Update-Version() {
+    $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
+    UpdateVersionFile $version.major $version.minor ([Int32]::Parse($version.patch) + 1).ToString()
+}
+
 function Get-Version(){   
     $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
     return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
