@@ -1,6 +1,4 @@
-﻿[string]$_version = $null
-
-function HashToInt32([string] $hash){
+﻿function HashToInt32([string] $hash){
     $longHash = [Int64]::Parse($hash.Substring(0,8), [System.Globalization.NumberStyles]::HexNumber)
     if($longHash -le [Int32]::MaxValue) {
         return ($longHash -as [Int32])
@@ -23,13 +21,8 @@ function UpdateVersionFile([string] $major, [string] $minor, [string] $patch){
 }
 
 function Get-Version(){
-    if($Script:_version -ne $null) {
-        return $Script:_version
-    }
-
     $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
-    $Script:_version = "$($version.major).$($version.minor).$($version.patch).$($commitHash)"
-    return $Script:_version
+    return "$($version.major).$($version.minor).$($version.patch).$($commitHash)"
 }
 
 function Set-Version(){

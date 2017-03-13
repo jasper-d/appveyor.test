@@ -1,4 +1,4 @@
-Import-Module ..\Scripts.psm1
+Import-Module .\Scripts.psm1
 
 $root = (split-path -parent $MyInvocation.MyCommand.Definition) + '\..'
 
