@@ -17,13 +17,5 @@ namespace FooLib.Tests
 
             Assert.Equal(0, result);
         }
-
-        [Fact]
-        public void DoSomethingFails() {
-            var foo = new Foo();
-            var result = foo.DoSomething();
-
-            Assert.Equal(1, result);
-        }
     }
 }
