@@ -1,4 +1,6 @@
-﻿function HashToInt32([string] $hash){
+﻿$commitHash = -1
+
+function HashToInt32([string] $hash){
     $longHash = [Int64]::Parse($hash.Substring(0,8), [System.Globalization.NumberStyles]::HexNumber)
     if($longHash -le [Int32]::MaxValue) {
         return ($longHash -as [Int32])
@@ -20,20 +22,20 @@ function UpdateVersionFile([string] $major, [string] $minor, [string] $patch){
     ConvertTo-Json -InputObject $version | Out-File -FilePath ".\version.json" -Encoding utf8 
 }
 
-function Get-Version(){
+function Get-Version(){   
     $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
-    return "$($version.major).$($version.minor).$($version.patch).$($commitHash)"
+    return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
 }
 
 function Set-Version(){
-    $commitHash = HashToInt32($env:APPVEYOR_REPO_COMMIT)
-    Write-BuildInfo "Commit hash is $($env:APPVEYOR_REPO_COMMIT), truncated to Int32 as $($commitHash)"
+    $script:commitHash = HashToInt32($env:APPVEYOR_REPO_COMMIT)
+    Write-BuildInfo "Commit hash is $($env:APPVEYOR_REPO_COMMIT), truncated to Int32 as $($script:commitHash)"
 
     if ($env:APPVEYOR_REPO_TAG -and $env:APPVEYOR_REPO_TAG_NAME -and $env:APPVEYOR_REPO_TAG_NAME -cmatch '^\s*(?:(?:v\.)|(?:v))?\s*(?<major>\d{1,9})\.(?<minor>\d{1,9})\.(?<patch>\d{1,9})\s*$') {
         Write-BuildInfo "Matching repo tag found"
         Write-BuildInfo "Repo tag is $($env:APPVEYOR_REPO_TAG)"
 
-        Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($commitHash)"
+        Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($script:commitHash)"
         UpdateVersionFile $matches['major'] $matches['minor'] $matches['patch']
 
         Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "true"
