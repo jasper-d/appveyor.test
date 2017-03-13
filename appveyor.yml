@@ -26,8 +26,8 @@ build:
   project: .\FooLib.sln
   verbosity: detailed
 
-#before_test:
-#  - ps: .\Prepare-TestEnvironment.ps1
+before_test:
+  - ps: .\Prepare-TestEnvironment.ps1
 
 test:
   assemblies:
