@@ -1,0 +1,8 @@
+FooLib.Tests/bin/
+FooLib.Tests/obj/
+FooLib/bin/
+FooLib/.vs/
+FooLib/obj/
+FooLib/packages/
+packages/
+.vs/

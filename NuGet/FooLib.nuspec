@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FooLib.dll</id>
+    <version>$version$</version>
+    <title>FooLib.dll</title>
+    <authors>Author</authors>
+    <owners>Owner</owners>
+    <licenseUrl>https://github.com/jasper-d/appveyor.test/blob/master/license.md</licenseUrl>
+    <projectUrl>https://github.com/jasper-d/appveyor.test</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Description</description>
+    <tags>Dummy</tags>
+  </metadata>
+  <files>
+        <file src="..\FooLib\bin\Release\FooLib.*" target="build" />
+      </files>
+</package>
