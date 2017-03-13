@@ -23,7 +23,7 @@ before_build:
 
 build:
   parallel: false
-  project: .\DryIoc.Wcf.sln
+  project: .\FooLib.sln
   verbosity: detailed
 
 #before_test:
