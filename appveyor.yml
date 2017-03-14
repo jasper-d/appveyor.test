@@ -18,7 +18,7 @@ configuration: Release
   # Set version number
 
 before_build:
-  - ps: .\Set-Version.ps1
+  - ps: .\CI\Set-Version.ps1
   - cmd: nuget restore .\FooLib.sln -Verbosity detailed
 
 build:
@@ -27,7 +27,7 @@ build:
   verbosity: detailed
 
 before_test:
-  - ps: .\Prepare-TestEnvironment.ps1
+  - ps: .\CI\Prepare-TestEnvironment.ps1
 
 test:
   assemblies:
@@ -37,10 +37,10 @@ cache:
   - packages -> **\packages.config
 
 after_build:
-  - ps: .\nuget\Pack.ps1
+  - ps: .\NuGet\Pack.ps1
 
 artifacts:
-  - path: '.\nuget\artifacts\FooLib.dll.*.nupkg'
+  - path: '.\NuGet\artifacts\FooLib.dll.*.nupkg'
     name: nuget
     type: NuGetPackage
 
@@ -62,7 +62,7 @@ deploy:
       DeployArtifacts: true
 
 after_deploy:
-    - ps: .\Update-VersionPostDeploy.ps1
+    - ps: .\CI\Update-VersionPostDeploy.ps1
     - git config --global credential.helper store
     - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:github_token):x-oauth-basic@github.com`n"
     - git config --global user.email "jasper-d@users.noreply.github.com"

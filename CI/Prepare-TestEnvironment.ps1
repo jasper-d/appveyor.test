@@ -1,4 +1,4 @@
-Import-Module .\Scripts.psm1
+Import-Module $PSScriptRoot\Scripts.psm1
 
 $port = 11119
 $iisExpressPath = "c:\program files\iis express\iisexpress.exe"

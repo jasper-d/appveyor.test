@@ -1,8 +1,9 @@
-﻿$patch = -1
+﻿$revision = -1
 $versionObj = $null
 
-function HashToPatch([string] $hash){
+function HashToRevision([string] $hash){
     $longHash = [Int32]::Parse($hash.Substring(0,4), [System.Globalization.NumberStyles]::HexNumber)
+    #AssemblyVersionAttribute does only support revisions up to 16**2 - 2
     if($longHash -le 65534) {
         return $longHash
     } else {
@@ -29,7 +30,7 @@ function Update-Version() {
 }
 
 function VersionToString($version){
-	return "$($script:versionObj.major).$($script:versionObj.minor).$($script:versionObj.patch).$($script:patch)"
+	return "$($script:versionObj.major).$($script:versionObj.minor).$($script:versionObj.patch).$($script:revision)"
 }
 
 function Get-Version() {
@@ -37,18 +38,18 @@ function Get-Version() {
 		return VersionToString
 	}
     $script:version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
-    return "$($version.major).$($version.minor).$($version.patch).$($script:patch)"
+    return "$($script:version.major).$($script:version.minor).$($script:version.patch).$($script:revision)"
 }
 
 function Set-Version(){
-    $script:patch = HashToPatch($env:APPVEYOR_REPO_COMMIT)
+    $script:revision = HashToRevision($env:APPVEYOR_REPO_COMMIT)
     Write-BuildInfo "Commit hash is $($env:APPVEYOR_REPO_COMMIT), truncated to Int32 as $($script:patch)"
 
     if ($env:APPVEYOR_REPO_TAG -and $env:APPVEYOR_REPO_TAG_NAME -and $env:APPVEYOR_REPO_TAG_NAME -cmatch '^\s*(?:(?:v\.)|(?:v))?\s*(?<major>\d{1,9})\.(?<minor>\d{1,9})\.(?<patch>\d{1,9})\s*$') {
         Write-BuildInfo "Matching repo tag found"
         Write-BuildInfo "Repo tag is $($env:APPVEYOR_REPO_TAG)"
 
-        Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($script:patch)"
+        Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($script:revision)"
         UpdateVersionFile $matches['major'] $matches['minor'] $matches['patch']
 
         Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "true"
