@@ -3,4 +3,6 @@ Import-Module .\PatchVersion.psm1
 
 Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "false"
 Set-Version
-Update-AllAssemblyInfoFiles Get-Version ".\"
+
+$v = Get-Version
+Update-AllAssemblyInfoFiles $v ".\"

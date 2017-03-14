@@ -26,8 +26,8 @@ function Update-SourceVersion {
 
 	get-content $o.FullName | 
 		%{$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
-		%{$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
-		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion }  > $TmpFile
+		%{$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewInformalVersion } |
+		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } | Out-File $tmpFile -Encoding utf8
 
 	 move-item $tmpFile $o.FullName -Force
   }
@@ -36,14 +36,7 @@ function Update-SourceVersion {
 
 function Update-AllAssemblyInfoFiles ($version, $path)
 {
-	$regex = [System.Text.RegularExpressions.Regex]::Match($version, "^[0-9]+(\.[0-9]+){1,3}$");
-
-	if ($regex.Success)
-	{
-		Throw "Provided version string is invalid"
-	}
-	foreach ($file in "AssemblyInfo.cs", "AssemblyInfo.vb" ) 
-	{
+	foreach ($file in "AssemblyInfo.cs", "AssemblyInfo.vb" ) {
 		get-childitem -Recurse -Path $path |? {$_.Name -eq $file} | Update-SourceVersion $version ;
 	}
 }

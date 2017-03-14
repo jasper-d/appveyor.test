@@ -29,12 +29,12 @@ function Update-Version() {
 }
 
 function VersionToString($version){
-	return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
+	return "$($script:versionObj.major).$($script:versionObj.minor).$($script:versionObj.patch).$($script:commitHash)"
 }
 
 function Get-Version() {
 	if($sciprt:versionObj -ne $null){
-		return VersionToString $script:versionObj
+		return VersionToString
 	}
     $script:version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
     return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
