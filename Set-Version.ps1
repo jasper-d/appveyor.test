@@ -6,4 +6,4 @@ Set-Version
 
 $v = Get-Version
 
-Update-AllAssemblyInfoFiles $v $env:APPVEYOR_REPO_COMMIT ".\"
+Update-AllAssemblyInfoFiles $v ".\"
