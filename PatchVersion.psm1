@@ -15,10 +15,10 @@
 
 
 function Update-SourceVersion {
-	Param ([string] $version)
+	Param ([string] $version, [string] $commitHash)
 	$NewVersion = 'AssemblyVersion("' + $version + '")';
 	$NewFileVersion = 'AssemblyFileVersion("' + $version + '")';
-	$NewInformalVersion = 'AssemblyInformationalVersion("' + $version + '")'
+	$NewInformalVersion = 'AssemblyInformationalVersion("' + $commitHash + '")'
 
 	foreach ($o in $input) {
 	Write-output $o.FullName
@@ -27,17 +27,17 @@ function Update-SourceVersion {
 	get-content $o.FullName | 
 		%{$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
 		%{$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewInformalVersion } |
-		%{$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } | Out-File $tmpFile -Encoding utf8
+		%{$_ -replace 'AssemblyFileVersion\("\w{32}"\)', $NewFileVersion } | Out-File $tmpFile -Encoding utf8
 
 	 move-item $tmpFile $o.FullName -Force
   }
 }
 
 
-function Update-AllAssemblyInfoFiles ($version, $path)
+function Update-AllAssemblyInfoFiles ($version, $commitHash, $path)
 {
 	foreach ($file in "AssemblyInfo.cs", "AssemblyInfo.vb" ) {
-		get-childitem -Recurse -Path $path |? {$_.Name -eq $file} | Update-SourceVersion $version ;
+		get-childitem -Recurse -Path $path |? {$_.Name -eq $file} | Update-SourceVersion $version $commitHash ;
 	}
 }
 

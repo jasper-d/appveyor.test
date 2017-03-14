@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2BC9E9C-419D-4087-B36E-4D7E0B1D8BAC}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		PatchVersion.psm1 = PatchVersion.psm1
 		Prepare-TestEnvironment.ps1 = Prepare-TestEnvironment.ps1
 		README.md = README.md
 		Scripts.psm1 = Scripts.psm1

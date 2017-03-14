@@ -1,12 +1,12 @@
-﻿$commitHash = -1
+﻿$patch = -1
 $versionObj = $null
 
-function HashToInt32([string] $hash){
-    $longHash = [Int64]::Parse($hash.Substring(0,8), [System.Globalization.NumberStyles]::HexNumber)
-    if($longHash -le [Int32]::MaxValue) {
-        return ($longHash -as [Int32])
+function HashToPatch([string] $hash){
+    $longHash = [Int32]::Parse($hash.Substring(0,4), [System.Globalization.NumberStyles]::HexNumber)
+    if($longHash -le 65534) {
+        return $longHash
     } else {
-        return [Int32]::Parse($hash.Substring(0,7), [System.Globalization.NumberStyles]::HexNumber)
+        return [Int32]::Parse($hash.Substring(0,3), [System.Globalization.NumberStyles]::HexNumber)
     }
 }
 
@@ -29,7 +29,7 @@ function Update-Version() {
 }
 
 function VersionToString($version){
-	return "$($script:versionObj.major).$($script:versionObj.minor).$($script:versionObj.patch).$($script:commitHash)"
+	return "$($script:versionObj.major).$($script:versionObj.minor).$($script:versionObj.patch).$($script:patch)"
 }
 
 function Get-Version() {
@@ -37,18 +37,18 @@ function Get-Version() {
 		return VersionToString
 	}
     $script:version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
-    return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
+    return "$($version.major).$($version.minor).$($version.patch).$($script:patch)"
 }
 
 function Set-Version(){
-    $script:commitHash = HashToInt32($env:APPVEYOR_REPO_COMMIT)
-    Write-BuildInfo "Commit hash is $($env:APPVEYOR_REPO_COMMIT), truncated to Int32 as $($script:commitHash)"
+    $script:patch = HashToPatch($env:APPVEYOR_REPO_COMMIT)
+    Write-BuildInfo "Commit hash is $($env:APPVEYOR_REPO_COMMIT), truncated to Int32 as $($script:patch)"
 
     if ($env:APPVEYOR_REPO_TAG -and $env:APPVEYOR_REPO_TAG_NAME -and $env:APPVEYOR_REPO_TAG_NAME -cmatch '^\s*(?:(?:v\.)|(?:v))?\s*(?<major>\d{1,9})\.(?<minor>\d{1,9})\.(?<patch>\d{1,9})\s*$') {
         Write-BuildInfo "Matching repo tag found"
         Write-BuildInfo "Repo tag is $($env:APPVEYOR_REPO_TAG)"
 
-        Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($script:commitHash)"
+        Update-AppveyorBuild -Version "$($matches['major']).$($matches['minor']).$($matches['patch']).$($script:patch)"
         UpdateVersionFile $matches['major'] $matches['minor'] $matches['patch']
 
         Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "true"

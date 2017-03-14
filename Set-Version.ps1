@@ -5,4 +5,5 @@ Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "false"
 Set-Version
 
 $v = Get-Version
-Update-AllAssemblyInfoFiles $v ".\"
+
+Update-AllAssemblyInfoFiles $v $env:APPVEYOR_REPO_COMMIT ".\"
