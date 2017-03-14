@@ -1,4 +1,5 @@
 ﻿$commitHash = -1
+$versionObj = $null
 
 function HashToInt32([string] $hash){
     $longHash = [Int64]::Parse($hash.Substring(0,8), [System.Globalization.NumberStyles]::HexNumber)
@@ -23,12 +24,19 @@ function UpdateVersionFile([string] $major, [string] $minor, [string] $patch){
 }
 
 function Update-Version() {
-    $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
-    UpdateVersionFile $version.major $version.minor ([Int32]::Parse($version.patch) + 1).ToString()
+    $version = Get-Version
+    UpdateVersionFile $script:versionObj.major $script:versionObj.minor ([Int32]::Parse($script:versionObj.patch) + 1).ToString()
 }
 
-function Get-Version(){   
-    $version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
+function VersionToString($version){
+	return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
+}
+
+function Get-Version() {
+	if($sciprt:versionObj -ne $null){
+		return VersionToString $script:versionObj
+	}
+    $script:version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
     return "$($version.major).$($version.minor).$($version.patch).$($script:commitHash)"
 }
 
@@ -46,8 +54,6 @@ function Set-Version(){
         Set-AppveyorBuildVariable -Name "DeployArtifacts" -Value "true"
     } else {
         $version = Get-Version
-
-        Write-BuildInfo "Read version file"
         Write-BuildInfo "Current version is $($version)"
 
         Update-AppveyorBuild -Version $version
@@ -69,3 +75,4 @@ function Write-BuildInfo ([string] $message){
 Export-ModuleMember -Function Write-*
 Export-ModuleMember -Function Get-Version
 Export-ModuleMember -Function Set-Version
+Export-ModuleMember -Function Update-Version
