@@ -21,7 +21,7 @@ function UpdateVersionFile([string] $major, [string] $minor, [string] $patch){
     Write-BuildInfo "Writing version file"
     Write-BuildInfo "New version is  $($major).$($minor).$($patch)"
 
-    ConvertTo-Json -InputObject $version | Out-File -FilePath ".\version.json" -Encoding utf8 
+    ConvertTo-Json -InputObject $version | Out-File -FilePath ".\CI\version.json" -Encoding utf8 
 }
 
 function Update-Version() {
@@ -37,7 +37,7 @@ function Get-Version() {
 	if($sciprt:versionObj -ne $null){
 		return VersionToString
 	}
-    $script:version = Get-Content -Raw -Path ".\version.json" | ConvertFrom-Json
+    $script:version = Get-Content -Raw -Path ".\CI\version.json" | ConvertFrom-Json
     return "$($script:version.major).$($script:version.minor).$($script:version.patch).$($script:revision)"
 }
 
